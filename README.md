@@ -14,8 +14,8 @@ It was designed with the thought of being ready to customisations.
 Project consists of two major parts: back end written with Scala and Play Framework as RESTful service, and web-UI developed as one page web app on Angular.
 
 Application:
-* [Server](https://gitlab.com/wt-t/crm)
-* [UI](https://gitlab.com/wt-t/crm-ui)
+* [Server](https://github.com/dataengi/crm-seed)
+* [UI](https://github.com/dataengi/crm-seed-ui)
 
 
 ### Use cases
