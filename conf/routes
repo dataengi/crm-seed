@@ -1,0 +1,53 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /version                                      com.dataengi.crm.controllers.CRMApplicationController.version
+
+# Contact book management
+
+GET     /api/v1/contacts/all                          com.dataengi.crm.contacts.controllers.ContactsBookManagementController.getContacts
+GET     /api/v1/contacts/owner                        com.dataengi.crm.contacts.controllers.ContactsBookManagementController.getCurrentUserContacts
+GET     /api/v1/contacts/:id                          com.dataengi.crm.contacts.controllers.ContactsBookManagementController.get(id: Long)
+POST    /api/v1/contacts/create                       com.dataengi.crm.contacts.controllers.ContactsBookManagementController.create
+PUT     /api/v1/contacts/update/:id                   com.dataengi.crm.contacts.controllers.ContactsBookManagementController.update(id: Int)
+PUT     /api/v1/contacts/update/:id/advertiser/:advId com.dataengi.crm.contacts.controllers.ContactsBookManagementController.updateAdvertiserId(id: Long, advId: Long)
+POST    /api/v1/contacts/delete                       com.dataengi.crm.contacts.controllers.ContactsBookManagementController.removeContacts
+DELETE  /api/v1/contacts/delete/:id                   com.dataengi.crm.contacts.controllers.ContactsBookManagementController.delete(id: Long)
+DELETE  /api/v1/contacts/delete/:id/advertiser        com.dataengi.crm.contacts.controllers.ContactsBookManagementController.deleteAdvertiserId(id: Long)
+
+GET     /api/v1/contacts/contactsbook/owner           com.dataengi.crm.contacts.controllers.ContactsBookManagementController.getContactsBook
+GET     /api/v1/contacts/contactsbook/owners          com.dataengi.crm.contacts.controllers.ContactsBookManagementController.getContactsBooks
+GET     /api/v1/contacts/contactsbook/owner/:id       com.dataengi.crm.contacts.controllers.ContactsBookManagementController.getContactsBookByOwner(id: Long)
+
+GET     /api/v1/contacts/group/get/:id                com.dataengi.crm.contacts.controllers.ContactsBookManagementController.getGroup(id: Long)
+POST    /api/v1/contacts/group/create                 com.dataengi.crm.contacts.controllers.ContactsBookManagementController.createGroup
+POST    /api/v1/contacts/group/add                    com.dataengi.crm.contacts.controllers.ContactsBookManagementController.addContactToGroup
+POST    /api/v1/contacts/group/delete                 com.dataengi.crm.contacts.controllers.ContactsBookManagementController.removeContactFromGroup
+POST    /api/v1/contacts/group/update                 com.dataengi.crm.contacts.controllers.ContactsBookManagementController.updateGroup
+DELETE  /api/v1/contacts/group/delete/:id             com.dataengi.crm.contacts.controllers.ContactsBookManagementController.deleteGroup(id: Long)
+GET     /api/v1/contacts/group/contactsbook/:id       com.dataengi.crm.contacts.controllers.ContactsBookManagementController.allGroupInContactsBook(id: Long)
+
+# Application version
+
+GET     /api/version                                  com.dataengi.crm.controllers.CRMApplicationController.versionJson
+
+# CRM User Profile management
+
+GET     /api/v1/profile                               com.dataengi.crm.profiles.controllers.ProfilesController.get
+POST    /api/v1/profile/update                        com.dataengi.crm.profiles.controllers.ProfilesController.update
+GET     /api/v1/profile/check/nickname/:nickname      com.dataengi.crm.profiles.controllers.ProfilesController.checkNickname(nickname: String)
+POST    /api/v1/profile/get/users                     com.dataengi.crm.profiles.controllers.ProfilesController.getProfilesByUsers
+
+# Auth routes
+->      /auth/                                         auth.Routes
+
+#Swagger documentation
+GET     /docs                                         controllers.Default.redirect(to = "/docs/swagger-ui/index.html?url=/swagger.json")
+GET     /swagger.json                                 controllers.ApiHelpController.getResources
+GET     /docs/swagger-ui/*file                        controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /files/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
+

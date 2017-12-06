@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres:9.5.8-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: crm
+    ports:
+      - 6432:5432
+
+  crm-ui:
+    image: dataengi/crm-ui:latest-dev
+    ports:
+      - 80:80
+    environment:
+      SERVER_ADDRESS: "http://10.20.10.104:9000"

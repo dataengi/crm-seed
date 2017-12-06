@@ -1,0 +1,23 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres:9.5.8-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: crm
+
+  crm:
+    image: dataengi/crm:latest
+    links:
+      - "postgres:postgres"
+    environment:
+      DB_ADDRESS: postgres
+    command: ["-Dpidfile.path=/dev/null"]
+
+  crm-ui:
+    image: dataengi/crm-ui:latest
+    restart: always
+    ports:
+      - 80:80
+    links:
+      - "crm:crm"

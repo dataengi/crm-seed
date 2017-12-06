@@ -1,0 +1,43 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Users Management
+GET         /api/v1/management/users/company/current/members        com.dataengi.crm.identities.controllers.UsersManagementController.getCompanyCurrentMembers
+GET         /api/v1/management/users/company/members/:id            com.dataengi.crm.identities.controllers.UsersManagementController.getCompanyMembers(id: Long)
+GET         /api/v1/management/users/identity/info                  com.dataengi.crm.identities.controllers.UsersManagementController.identityInfo
+POST        /api/v1/management/users/activate/:id                   com.dataengi.crm.identities.controllers.UsersManagementController.activateUser(id: Long)
+POST        /api/v1/management/users/deactivate/:id                 com.dataengi.crm.identities.controllers.UsersManagementController.deactivateUser(id: Long)
+
+# User invites management
+POST        /invite                                                 com.dataengi.crm.identities.controllers.InvitesController.create()
+POST        /api/v1/invite/advertiser                               com.dataengi.crm.identities.controllers.InvitesController.createAdvertiserInvite()
+GET         /api/v1/invites/all                                     com.dataengi.crm.identities.controllers.InvitesController.all
+GET         /api/v1/invites/company                                 com.dataengi.crm.identities.controllers.InvitesController.getByCompany
+GET         /api/v1/invites/get/invitedBy/:userId                   com.dataengi.crm.identities.controllers.InvitesController.getByInvitedUser(userId: Long)
+GET         /api/v1/invites/check/:email                            com.dataengi.crm.identities.controllers.InvitesController.checkExistUser(email: String)
+DELETE      /api/v1/invites/:id                                     com.dataengi.crm.identities.controllers.InvitesController.remove(id: Long)
+
+# Companies managment routes
+GET         /api/v1/companies/all                                   com.dataengi.crm.identities.controllers.CompaniesController.all
+POST        /api/v1/companies/create                                com.dataengi.crm.identities.controllers.CompaniesController.create
+GET         /api/v1/companies/get/:id                               com.dataengi.crm.identities.controllers.CompaniesController.get(id: Long)
+GET         /api/v1/companies/find/name/:name                       com.dataengi.crm.identities.controllers.CompaniesController.findByName(name: String)
+
+# Roles managment routes
+GET         /api/v1/roles/all                                       com.dataengi.crm.identities.controllers.RolesController.all
+GET         /api/v1/roles/get/:id                                   com.dataengi.crm.identities.controllers.CompaniesController.get(id: Long)
+GET         /api/v1/roles/find/name/:name                           com.dataengi.crm.identities.controllers.CompaniesController.findByName(name: String)
+
+# Authentication
+POST        /api/v1/authentication/password/forgot                  com.dataengi.crm.identities.controllers.AuthenticationController.forgotPassword
+GET         /api/v1/authentication/password/recover/:id             com.dataengi.crm.identities.controllers.AuthenticationController.toRecoverPassword(id: String)
+POST        /api/v1/authentication/password/recover/:id             com.dataengi.crm.identities.controllers.AuthenticationController.recoverPassword(id: String)
+GET         /api/v1/authentication/identity                         com.dataengi.crm.identities.controllers.AuthenticationController.identify
+POST        /api/v1/authentication/signIn                           com.dataengi.crm.identities.controllers.AuthenticationController.signIn
+POST        /api/v1/authentication/signUp/:uuid                     com.dataengi.crm.identities.controllers.AuthenticationController.signUp(uuid:String)
+POST        /api/v1/authentication/signOut                          com.dataengi.crm.identities.controllers.AuthenticationController.signOut
+GET         /api/v1/authentication/signUp/:hash                     com.dataengi.crm.identities.controllers.InvitesController.toSignUp(hash: java.util.UUID)
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                                           controllers.Assets.at(path="/public", file)

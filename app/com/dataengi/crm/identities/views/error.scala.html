@@ -1,0 +1,25 @@
+@(code: Int, title: String, message: String)
+<html>
+    <head>
+           @*TODO don't load from main project*@
+        <link rel="stylesheet" href="/assets/css/style.css">
+    </head>
+
+    <body>
+
+        <div class="container d-table">
+            <div class="d-100vh-va-middle">
+                <div class="row" style="margin-top: -150px">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="clearfix">
+                            <h1 class="float-xs-left display-3 mr-2">@code</h1>
+                            <h4 class="pt-1">@title</h4>
+                            <p class="text-muted">@message</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
