@@ -1,5 +1,7 @@
 # CRM Seed
 
+![travis_ci](https://travis-ci.org/dataengi/crm-seed.svg?branch=master)
+
 Scala seed project for starting new customer relationship management system.
 
 
