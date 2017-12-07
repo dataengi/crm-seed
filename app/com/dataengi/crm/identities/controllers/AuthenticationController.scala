@@ -36,7 +36,7 @@ class AuthenticationController @Inject()(val silhouette: Silhouette[DefaultEnv],
 
   @ApiImplicitParams(Array(new ApiImplicitParam(
     name = "body",
-    dataType = "com.dataengi.identities.controllers.data.SignInData",
+    dataType = "com.dataengi.crm.identities.controllers.data.SignInData",
     required = true,
     paramType = "body"
   )))
@@ -49,7 +49,7 @@ class AuthenticationController @Inject()(val silhouette: Silhouette[DefaultEnv],
 
   @ApiImplicitParams(Array(new ApiImplicitParam(
     name = "body",
-    dataType = "com.dataengi.identities.controllers.data.SignUpData",
+    dataType = "com.dataengi.crm.identities.controllers.data.SignUpData",
     required = true,
     paramType = "body"
   )))
@@ -63,7 +63,7 @@ class AuthenticationController @Inject()(val silhouette: Silhouette[DefaultEnv],
 
   @ApiImplicitParams(Array(new ApiImplicitParam(
     name = "body",
-    dataType = "com.dataengi.identities.controllers.data.ForgotPassword",
+    dataType = "com.dataengi.crm.identities.controllers.data.ForgotPassword",
     required = true,
     paramType = "body"
   )))
@@ -81,7 +81,7 @@ class AuthenticationController @Inject()(val silhouette: Silhouette[DefaultEnv],
 
   @ApiImplicitParams(Array(new ApiImplicitParam(
     name = "body",
-    dataType = "com.dataengi.identities.controllers.data.RecoverPasswordData",
+    dataType = "com.dataengi.crm.identities.controllers.data.RecoverPasswordData",
     required = true,
     paramType = "body"
   )))

@@ -54,7 +54,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.CreateContactData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.CreateContactData",
       required = true,
       paramType = "body"
     )))
@@ -66,7 +66,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.UpdateContactData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.UpdateContactData",
       required = true,
       paramType = "body"
     )))
@@ -83,7 +83,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.CreateGroupData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.CreateGroupData",
       required = true,
       paramType = "body"
     )))
@@ -111,7 +111,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.GetContactsBooksData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.GetContactsBooksData",
       required = true,
       paramType = "body"
     )))
@@ -136,7 +136,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.AddContactsToGroupData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.AddContactsToGroupData",
       required = true,
       paramType = "body"
     )))
@@ -148,7 +148,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.RemoveContactsFromGroupData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.LeaveGroupData",
       required = true,
       paramType = "body"
     )))
@@ -160,7 +160,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.UpdateGroupData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.UpdateGroupData",
       required = true,
       paramType = "body"
     )))
@@ -172,7 +172,7 @@ class ContactsBookManagementController @Inject()(contactsService: ContactsServic
     new ApiImplicitParam(name = "X-Auth-Token", required = true, dataType = "string", paramType = "header"),
     new ApiImplicitParam(
       name = "body",
-      dataType = "com.dataengi.contacts.controllers.data.RemoveContactsData",
+      dataType = "com.dataengi.crm.contacts.controllers.data.RemoveContactsData",
       required = true,
       paramType = "body"
     )))
