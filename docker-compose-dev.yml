@@ -13,4 +13,4 @@ services:
     ports:
       - 80:80
     environment:
-      SERVER_ADDRESS: "http://10.20.10.104:9000"
+      SERVER_ADDRESS: "BACKEND_URL"
