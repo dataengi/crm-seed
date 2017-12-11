@@ -42,6 +42,8 @@ git.gitTagToVersionNumber := {
   case _                                   => None
 }
 
+packageName in Docker := "crm"
+
 dockerBaseImage := "openjdk:8-jre"
 dockerUsername := Some("dataengi")
 dockerUpdateLatest := true

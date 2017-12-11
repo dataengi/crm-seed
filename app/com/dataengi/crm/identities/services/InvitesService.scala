@@ -133,7 +133,7 @@ class InvitesServiceImplementation @Inject()(invitesRepository: InvitesRepositor
 
   // TODO: extract to config
   override def getInviteUrl(invite: Invite): Or[String] =
-    s"/crm#/auth/signUp?email=${invite.email}&hash=${invite.hash}".toOr
+    s"/#/auth/signUp?email=${invite.email}&hash=${invite.hash}".toOr
 
   override def remove(id: Long): EmptyOr = invitesRepository.remove(id)
 
