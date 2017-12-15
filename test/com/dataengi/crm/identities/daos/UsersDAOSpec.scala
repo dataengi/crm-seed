@@ -24,9 +24,9 @@ class UsersDAOSpec
     )
   }
 
-  val TestLoginInfo: LoginInfo = LoginInfo("provider", "dasd@asd.com")
+  val TestLoginInfo: LoginInfo  = LoginInfo("provider", "dasd@asd.com")
   val TestLoginInfo2: LoginInfo = LoginInfo("provider2", "dasd2@asd.com")
-  lazy val usersDAO            = application.injector.instanceOf[UsersDAO]
+  lazy val usersDAO             = application.injector.instanceOf[UsersDAO]
 
   "UsersDAOSpecification" should {
 
@@ -53,7 +53,6 @@ class UsersDAOSpec
       val newCompany                      = companiesService.get(newCompanyResult.value).await().value
       val role                            = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
 
-
       val user = User(
         loginInfo = TestLoginInfo,
         company = newCompany,
@@ -65,7 +64,7 @@ class UsersDAOSpec
         role = role
       )
 
-      val userList = List(user,user2)
+      val userList = List(user, user2)
 
       newCompany.id must not be None
 
@@ -98,10 +97,9 @@ class UsersDAOSpec
       val newCompany                      = companiesService.get(newCompanyResult.value).await().value
       val role                            = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
 
-
       newCompany.id must not be None
 
-      val companyId = newCompany.id.get
+      val companyId      = newCompany.id.get
       val findUserResult = usersDAO.findByCompany(companyId).await()
       println(s"[user-dao][find] ${findUserResult.logResult}")
       findUserResult.isRight === true
@@ -111,7 +109,6 @@ class UsersDAOSpec
       users must have size 0
 
     }
-
 
     "all user" in {
       val allResult = usersDAO.all.await()
@@ -140,10 +137,7 @@ class UsersDAOSpec
 
       val key = getUserResult.right.get
 
-      val updateUser = User(
-        loginInfo = TestLoginInfo4,
-          company = newCompany,
-          role = role).copy(id = Some(key))
+      val updateUser       = User(loginInfo = TestLoginInfo4, company = newCompany, role = role).copy(id = Some(key))
       val updateUserResult = usersDAO.update(updateUser).await()
       updateUserResult.isRight === true
 
@@ -161,13 +155,9 @@ class UsersDAOSpec
 
       val TestLoginInfo5: LoginInfo = LoginInfo("provider4", "dasd4@asd.com")
 
-      val updateUser = User(
-        loginInfo = TestLoginInfo5,
-        company = newCompany,
-        role = role).copy(id = Some(56667))
+      val updateUser       = User(loginInfo = TestLoginInfo5, company = newCompany, role = role).copy(id = Some(56667))
       val updateUserResult = usersDAO.update(updateUser).await()
       updateUserResult.isLeft === true
-
 
     }
 
@@ -215,19 +205,14 @@ class UsersDAOSpec
 
       val key = getUserResult.right.get
 
-
-      val updateUserResult = usersDAO.updateState(key,UserStates.Activated).await()
+      val updateUserResult = usersDAO.updateState(key, UserStates.Activated).await()
       updateUserResult.isRight === true
 
       val getUser = usersDAO.get(key).await()
       getUser.isRight === true
       getUser.value.state === UserStates.Activated
 
-
     }
   }
-
-
-
 
 }
