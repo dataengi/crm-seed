@@ -49,13 +49,13 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
     }
 
     "Update company " in {
-      val addCompanyResult:XorType[Long] = companiesDAO.add(TestCompany).await()
+      val addCompanyResult: XorType[Long] = companiesDAO.add(TestCompany).await()
       addCompanyResult.isRight === true
-      val id: Long = addCompanyResult.value
+      val id: Long       = addCompanyResult.value
       val getByIdCompany = companiesDAO.get(id).await()
       getByIdCompany.isRight === true
       getByIdCompany.value === TestCompany.copy(id = Some(id))
-      val updateCompany = companiesDAO.update(getByIdCompany.right.get.copy(name= "another name")).await()
+      val updateCompany = companiesDAO.update(getByIdCompany.right.get.copy(name = "another name")).await()
       updateCompany.isRight === true
       val updatedCompany = companiesDAO.get(id).await()
       updatedCompany.value === Company("another name", Some(id))
@@ -88,7 +88,7 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
       val getByIdCompany = companiesDAO.get(id).await()
       getByIdCompany.isRight === true
       getByIdCompany.value === TestCompany.copy(id = Some(id))
-      val deleteCompanyResult =companiesDAO.delete(id).await()
+      val deleteCompanyResult = companiesDAO.delete(id).await()
       deleteCompanyResult.isRight === true
     }
 
@@ -99,16 +99,15 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
     }
 
     "Add list of companies" in {
-      val company1 = Company(name = "Test")
-      val company2 = Company(
-        name = "Test1")
-      val CompanyList = List(company1, company2)
+      val company1         = Company(name = "Test")
+      val company2         = Company(name = "Test1")
+      val CompanyList      = List(company1, company2)
       val addCompanyResult = companiesDAO.add(CompanyList).await()
       println(s"[companies-dao][add] $addCompanyResult}")
       addCompanyResult.isRight === true
 
-      val id1 = addCompanyResult.right.get.head
-      val id2 = addCompanyResult.right.get.last
+      val id1            = addCompanyResult.right.get.head
+      val id2            = addCompanyResult.right.get.last
       val getByCompanyId = companiesDAO.get(id1).await()
       getByCompanyId.isRight === true
       val getByIdCompany = companiesDAO.get(id2).await()
