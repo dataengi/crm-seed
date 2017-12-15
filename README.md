@@ -1,6 +1,7 @@
 # CRM Seed
 
-![travis_ci](https://travis-ci.org/dataengi/crm-seed.svg?branch=master) [![Join the chat at https://gitter.im/dataengi/crm-seed](https://badges.gitter.im/dataengi/crm-seed.svg)](https://gitter.im/dataengi/crm-seed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/dataengi/crm-seed.svg?branch=master)](https://travis-ci.org/dataengi/crm-seed)
+[![Join the chat at https://gitter.im/dataengi/crm-seed](https://badges.gitter.im/dataengi/crm-seed.svg)](https://gitter.im/dataengi/crm-seed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Scala seed project for starting new customer relationship management system.
 
