@@ -17,43 +17,11 @@ class PasswordInfoDAOSpec extends PlaySpecification with AuthenticationContext w
 
   lazy val passwordInfoDAO = application.injector.instanceOf[PasswordInfoDAO]
 
-  lazy val loginInfo = LoginInfo("testProviderId", "testProviderKey")
+  lazy val loginInfo    = LoginInfo("testProviderId", "testProviderKey")
   lazy val passwordInfo = PasswordInfo("testHasher", "password", Some("testSalt"))
 
   "get not exist value" in {
     val resultPasswordInfo = passwordInfoDAO.find(loginInfo).await()
     resultPasswordInfo.isEmpty === true
   }
-
-  "add login info" in {
-    val addUserInfo = passwordInfoDAO.add(loginInfo, passwordInfo).await()
-    addUserInfo === passwordInfo
-  }
-
-  "update login info" in {
-    val addUserInfo= passwordInfoDAO.add(loginInfo, passwordInfo).await()
-    addUserInfo === passwordInfo
-    val updateUserInfo = passwordInfoDAO.update(loginInfo, passwordInfo).await()
-    updateUserInfo === passwordInfo
-  }
-
-  "save login info" in {
-    val saveUserInfo = passwordInfoDAO.save(loginInfo, passwordInfo).await()
-    saveUserInfo === passwordInfo
-
-    val passwordInfoForUpdate = passwordInfo.copy(password = "newPass")
-
-    val updateUserInfo = passwordInfoDAO.save(loginInfo, passwordInfo).await()
-    updateUserInfo === passwordInfoForUpdate
-  }
-
-  "remove login info" in {
-    val saveUserInfo = passwordInfoDAO.save(loginInfo, passwordInfo).await()
-    saveUserInfo === passwordInfo
-    passwordInfoDAO.remove(loginInfo).await()
-    val resultPasswordInfo = passwordInfoDAO.find(loginInfo).await()
-    resultPasswordInfo.isEmpty === true
-  }
 }
-
-

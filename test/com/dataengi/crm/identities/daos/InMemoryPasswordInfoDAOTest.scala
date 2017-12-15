@@ -21,55 +21,54 @@ class InMemoryPasswordInfoDAOTest extends PlaySpecification with AuthenticationC
 
   lazy val passwordInfoDAO = application.injector.instanceOf[PasswordInfoDAO]
 
-  lazy val loginInfo = LoginInfo("testProviderId", "testProviderKey")
+  lazy val loginInfo    = LoginInfo("testProviderId", "testProviderKey")
   lazy val passwordInfo = PasswordInfo("testHasher", "password", Some("testSalt"))
 
-    sequential
+  sequential
 
   "PasswordInfoDAO" should {
 
-
     "find/get not exist value" in {
       val resultPasswordInfoFuture = passwordInfoDAO.find(loginInfo)
-      val resultPasswordInfo = Await.result(resultPasswordInfoFuture, 10 seconds)
+      val resultPasswordInfo       = Await.result(resultPasswordInfoFuture, 10 seconds)
       resultPasswordInfo.isEmpty === true
     }
 
     "add login info" in {
       val addUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.add(loginInfo, passwordInfo)
-      val addUserInfo: PasswordInfo = Await.result(addUserInfoFuture, 10 seconds)
+      val addUserInfo: PasswordInfo               = Await.result(addUserInfoFuture, 10 seconds)
       addUserInfo === passwordInfo
     }
 
     "update login info" in {
       val addUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.add(loginInfo, passwordInfo)
-      val addUserInfo: PasswordInfo = Await.result(addUserInfoFuture, 10 seconds)
+      val addUserInfo: PasswordInfo               = Await.result(addUserInfoFuture, 10 seconds)
       addUserInfo === passwordInfo
       val updateUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.update(loginInfo, passwordInfo)
-      val updateUserInfo: PasswordInfo =  Await.result(updateUserInfoFuture, 10 seconds)
+      val updateUserInfo: PasswordInfo               = Await.result(updateUserInfoFuture, 10 seconds)
       updateUserInfo === passwordInfo
     }
 
     "save login info" in {
       val saveUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfo)
-      val saveUserInfo: PasswordInfo = Await.result(saveUserInfoFuture, 10 seconds)
+      val saveUserInfo: PasswordInfo               = Await.result(saveUserInfoFuture, 10 seconds)
       saveUserInfo === passwordInfo
 
       val passwordInfoForUpdate = passwordInfo.copy(password = "newPass")
 
       val updateUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfoForUpdate)
-      val updateUserInfo: PasswordInfo = Await.result(updateUserInfoFuture, 10 seconds)
+      val updateUserInfo: PasswordInfo               = Await.result(updateUserInfoFuture, 10 seconds)
       updateUserInfo === passwordInfoForUpdate
     }
 
     "remove login info" in {
       val saveUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfo)
-      val saveUserInfo: PasswordInfo = Await.result(saveUserInfoFuture, 10 seconds)
+      val saveUserInfo: PasswordInfo               = Await.result(saveUserInfoFuture, 10 seconds)
       saveUserInfo === passwordInfo
       val removeLoginInfoFuture = passwordInfoDAO.remove(loginInfo)
       Await.result(removeLoginInfoFuture, 10 seconds)
       val resultPasswordInfoFuture = passwordInfoDAO.find(loginInfo)
-      val resultPasswordInfo = Await.result(resultPasswordInfoFuture, 10 seconds)
+      val resultPasswordInfo       = Await.result(resultPasswordInfoFuture, 10 seconds)
       resultPasswordInfo.isEmpty === true
     }
   }
