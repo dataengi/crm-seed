@@ -5,6 +5,7 @@ import com.dataengi.crm.profiles.context.ProfilesContext
 import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.common.extensions.logging._
+import com.dataengi.crm.profiles.models.Profile
 import org.scalacheck.{Arbitrary, Gen}
 import org.specs2.runner.SpecificationsFinder
 
@@ -14,6 +15,30 @@ import org.specs2.runner.SpecificationsFinder
 class ProfilesDAOSpec extends PlaySpecification with ProfilesContext with SpecificationsFinder {
 
   "ProfilesDAOSpecification" should {
+
+    "get option profile by id" in {
+
+      val getProfileResult = profilesDAO.getOption(24254625625L).await()
+      getProfileResult.isRight === true
+
+      getProfileResult === Right(None)
+    }
+
+    "get option profile by id" in {
+
+      val result = profilesDAO.clear.await()
+      result.isRight === true
+
+      val profile   = profileArbitrary.arbitrary.sample.get
+      val addResult = profilesDAO.add(profile).await()
+      addResult.isRight === true
+
+      val getProfileResult = profilesDAO.getOption(addResult.value).await()
+      getProfileResult.isRight === true
+
+      getProfileResult.right.get.get === profile
+
+    }
 
     "add profile" in {
       val profile   = profileArbitrary.arbitrary.sample.get

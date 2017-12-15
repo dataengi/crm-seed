@@ -3,6 +3,7 @@ package com.dataengi.crm.identities.daos
 import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.identities.context.AuthenticationContext
+import com.dataengi.crm.identities.daos.errors.CompaniesDAOError
 import com.dataengi.crm.identities.models.Company
 import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
@@ -33,13 +34,90 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
       val id             = addCompanyResult.value
       val getByIdCompany = companiesDAO.get(id).await()
       getByIdCompany.isRight === true
+      getByIdCompany.value === Company("TestCompany", Some(id))
+
+    }
+
+    "Select company option by id " in {
+      val addCompanyResult = companiesDAO.add(TestCompany).await()
+      addCompanyResult.isRight === true
+      val id             = addCompanyResult.value
+      val getByIdCompany = companiesDAO.getOption(id).await()
+      getByIdCompany.isRight === true
+      getByIdCompany.value === Some(TestCompany.copy(id = Some(id)))
+
+    }
+
+    "Update company " in {
+      val addCompanyResult:XorType[Long] = companiesDAO.add(TestCompany).await()
+      addCompanyResult.isRight === true
+      val id: Long = addCompanyResult.value
+      val getByIdCompany = companiesDAO.get(id).await()
+      getByIdCompany.isRight === true
       getByIdCompany.value === TestCompany.copy(id = Some(id))
+      val updateCompany = companiesDAO.update(getByIdCompany.right.get.copy(name= "another name")).await()
+      updateCompany.isRight === true
+      val updatedCompany = companiesDAO.get(id).await()
+      updatedCompany.value === Company("another name", Some(id))
+
+    }
+
+    "get company by id - negative" in {
+
+      val getByIdCompany = companiesDAO.get(466).await()
+
+      getByIdCompany.isLeft === true
+
+      getByIdCompany must beLeft(CompaniesDAOError("Company not found in companies table"))
+
+    }
+
+    "update negative" in {
+
+      val result = companiesDAO.update(Company("test")).await()
+
+      result.isLeft === true
+
+      result must beLeft(CompaniesDAOError("Can not do action because company doesn't exist"))
+    }
+
+    "Delete company by id " in {
+      val addCompanyResult = companiesDAO.add(TestCompany).await()
+      addCompanyResult.isRight === true
+      val id             = addCompanyResult.value
+      val getByIdCompany = companiesDAO.get(id).await()
+      getByIdCompany.isRight === true
+      getByIdCompany.value === TestCompany.copy(id = Some(id))
+      val deleteCompanyResult =companiesDAO.delete(id).await()
+      deleteCompanyResult.isRight === true
     }
 
     "find exist company by name" in {
       val getByNameResult = companiesDAO.find(TestCompany.name).await()
       println(s"[companies-dao][get-by-name] $getByNameResult}")
       getByNameResult.isRight === true
+    }
+
+    "Add list of companies" in {
+      val company1 = Company(name = "Test")
+      val company2 = Company(
+        name = "Test1")
+      val CompanyList = List(company1, company2)
+      val addCompanyResult = companiesDAO.add(CompanyList).await()
+      println(s"[companies-dao][add] $addCompanyResult}")
+      addCompanyResult.isRight === true
+
+      val id1 = addCompanyResult.right.get.head
+      val id2 = addCompanyResult.right.get.last
+      val getByCompanyId = companiesDAO.get(id1).await()
+      getByCompanyId.isRight === true
+      val getByIdCompany = companiesDAO.get(id2).await()
+      getByIdCompany.isRight === true
+    }
+
+    "list of companies" in {
+      val getByIdCompany = companiesDAO.all.await()
+      getByIdCompany.isRight === true
     }
 
     "add and remove" in {
@@ -58,7 +136,7 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
     "update company" in {
       val company             = Company("CompanyForUpdate")
       val companyId           = companiesDAO.add(company).await().value
-      val updateForCompany    = Company("updatedcomany").copy(id = Some(companyId))
+      val updateForCompany    = Company("updatedcompany").copy(id = Some(companyId))
       val updateCompanyResult = companiesDAO.update(updateForCompany).await()
       updateCompanyResult.isRight === true
       val getByIdCompany = companiesDAO.get(companyId).await()

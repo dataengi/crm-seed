@@ -12,6 +12,7 @@ class ContactsDAOSpec extends PlaySpecification with ContactsDAOContext with Spe
 
   sequential
 
+
   "ContactsDAO".should {
     "add contact and get it" in {
 

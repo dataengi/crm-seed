@@ -6,6 +6,7 @@ import play.api.test.PlaySpecification
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.contacts.daos.arbitraries.ContactsArbitrary
+import com.dataengi.crm.contacts.daos.errors.{GroupsDAOError, GroupsDAOErrors}
 import com.dataengi.crm.contacts.models.Group
 import org.scalacheck.Gen
 import org.specs2.runner.SpecificationsFinder
@@ -60,6 +61,16 @@ class GroupsDAOSpec extends PlaySpecification with CRMApplication with Specifica
       getGroupByIdResult.value === updatedGroup
     }
 
+    "Update group - negative" in {
+      val result = groupsDAO.update(Group("new", 55777, 65, None)).await()
+      result.isLeft === true
+      result must beLeft(GroupsDAOError("Can not do action because group id is empty"))
+    }
+
+    "list of companies" in {
+      val getGroupByIdResult = groupsDAO.all.await()
+      getGroupByIdResult.isRight === true
+    }
     "find group by name" in {
       val findGroupByNameResult = groupsDAO.findByName(TestGroup.name).await()
       findGroupByNameResult.isRight === true
@@ -80,8 +91,8 @@ class GroupsDAOSpec extends PlaySpecification with CRMApplication with Specifica
 
     "find groups by contacts book id" in {
       val testContactsBookId: Long = Gen.Choose.chooseLong.choose(0, Int.MaxValue).sample.getOrElse(0l)
-      val groups             = Gen.listOfN(10, groupArbitrary.arbitrary).sample.get.map(_.copy(contactsBookId = testContactsBookId))
-      val addGroupsResult    = groupsDAO.add(groups).await()
+      val groups                   = Gen.listOfN(10, groupArbitrary.arbitrary).sample.get.map(_.copy(contactsBookId = testContactsBookId))
+      val addGroupsResult          = groupsDAO.add(groups).await()
       addGroupsResult.isRight === true
       val getGroupsByContactsBookIdResult = groupsDAO.findByContactsBookId(testContactsBookId).await()
       getGroupsByContactsBookIdResult.isRight === true
