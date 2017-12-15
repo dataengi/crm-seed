@@ -24,7 +24,10 @@ class InMemoryPasswordInfoDAOTest extends PlaySpecification with AuthenticationC
   lazy val loginInfo = LoginInfo("testProviderId", "testProviderKey")
   lazy val passwordInfo = PasswordInfo("testHasher", "password", Some("testSalt"))
 
+    sequential
+
   "PasswordInfoDAO" should {
+
 
     "find/get not exist value" in {
       val resultPasswordInfoFuture = passwordInfoDAO.find(loginInfo)
@@ -54,7 +57,7 @@ class InMemoryPasswordInfoDAOTest extends PlaySpecification with AuthenticationC
 
       val passwordInfoForUpdate = passwordInfo.copy(password = "newPass")
 
-      val updateUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfo)
+      val updateUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfoForUpdate)
       val updateUserInfo: PasswordInfo = Await.result(updateUserInfoFuture, 10 seconds)
       updateUserInfo === passwordInfoForUpdate
     }
