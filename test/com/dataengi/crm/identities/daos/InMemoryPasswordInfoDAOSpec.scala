@@ -3,15 +3,12 @@ package com.dataengi.crm.identities.daos
 import com.dataengi.crm.identities.context.AuthenticationContext
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
-import org.specs2.mutable.Specification
-import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
-import com.dataengi.crm.common.extensions.types._
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
-class InMemoryPasswordInfoDAOTest extends PlaySpecification with AuthenticationContext {
+class InMemoryPasswordInfoDAOSpec extends PlaySpecification with AuthenticationContext {
 
   override lazy val fakeModule = new FakeModule {
     additionalBindings = Seq(
