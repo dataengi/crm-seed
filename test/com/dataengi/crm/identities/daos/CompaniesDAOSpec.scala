@@ -105,7 +105,9 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
       val CompanyList      = List(company1, company2)
       val addCompanyResult = companiesDAO.add(CompanyList).await()
       println(s"[companies-dao][add] $addCompanyResult}")
-      addCompanyResult.isRight === true
+      val companiesDB = addCompanyResult.value
+
+      companiesDB must have size 2
 
       val id1            = addCompanyResult.right.get.head
       val id2            = addCompanyResult.right.get.last
