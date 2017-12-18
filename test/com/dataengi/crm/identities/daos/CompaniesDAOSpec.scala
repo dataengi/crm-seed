@@ -3,7 +3,7 @@ package com.dataengi.crm.identities.daos
 import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.identities.context.AuthenticationContext
-import com.dataengi.crm.identities.daos.errors.CompaniesDAOError
+import com.dataengi.crm.identities.daos.errors.{CompaniesDAOError, CompaniesDAOErrors}
 import com.dataengi.crm.identities.models.Company
 import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
@@ -63,12 +63,13 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
     }
 
     "get company by id - negative" in {
-
-      val getByIdCompany = companiesDAO.get(466).await()
+      val result = companiesDAO.clear.await()
+      result.isRight === true
+      val getByIdCompany = companiesDAO.get(0).await()
 
       getByIdCompany.isLeft === true
 
-      getByIdCompany must beLeft(CompaniesDAOError("Company not found in companies table"))
+      getByIdCompany must beLeft(CompaniesDAOErrors.CompanyNotFound)
 
     }
 
@@ -78,7 +79,7 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
 
       result.isLeft === true
 
-      result must beLeft(CompaniesDAOError("Can not do action because company doesn't exist"))
+      result must beLeft(CompaniesDAOErrors.CompanyIdIsEmpty)
     }
 
     "Delete company by id " in {
@@ -112,11 +113,27 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
       getByCompanyId.isRight === true
       val getByIdCompany = companiesDAO.get(id2).await()
       getByIdCompany.isRight === true
+
     }
 
     "list of companies" in {
+      val result = companiesDAO.clear.await()
+      result.isRight === true
       val getByIdCompany = companiesDAO.all.await()
       getByIdCompany.isRight === true
+      getByIdCompany.value === List()
+    }
+
+    "list of companies - positive" in {
+      val company1         = Company(name = "Test")
+      val company2         = Company(name = "Test1")
+      val CompanyList      = List(company1, company2)
+      val addCompanyResult = companiesDAO.add(CompanyList).await()
+      println(s"[companies-dao][add] $addCompanyResult}")
+      addCompanyResult.isRight === true
+      val getByIdCompany = companiesDAO.all.await()
+      getByIdCompany.isRight === true
+
     }
 
     "add and remove" in {
@@ -135,7 +152,7 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
     "update company" in {
       val company             = Company("CompanyForUpdate")
       val companyId           = companiesDAO.add(company).await().value
-      val updateForCompany    = Company("updatedcompany").copy(id = Some(companyId))
+      val updateForCompany    = Company("updatedcompany", id = Some(companyId))
       val updateCompanyResult = companiesDAO.update(updateForCompany).await()
       updateCompanyResult.isRight === true
       val getByIdCompany = companiesDAO.get(companyId).await()

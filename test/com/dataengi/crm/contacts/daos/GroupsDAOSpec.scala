@@ -62,9 +62,9 @@ class GroupsDAOSpec extends PlaySpecification with CRMApplication with Specifica
     }
 
     "Update group - negative" in {
-      val result = groupsDAO.update(Group("new", 55777, 65, None)).await()
-      result.isLeft === true
-      result must beLeft(GroupsDAOError("Can not do action because group id is empty"))
+      val updateGroupResult = groupsDAO.update(Group("new", 55777, 65, None)).await()
+      updateGroupResult.isLeft === true
+      updateGroupResult must beLeft(GroupsDAOErrors.GroupIdIsEmpty)
     }
 
     "list of companies" in {
@@ -80,7 +80,8 @@ class GroupsDAOSpec extends PlaySpecification with CRMApplication with Specifica
     }
 
     "add and get groups" in {
-      val groups          = Gen.listOfN(10, groupArbitrary.arbitrary).sample.get
+      val groups
+      = Gen.listOfN(10, groupArbitrary.arbitrary).sample.get
       val addGroupsResult = groupsDAO.add(groups).await()
       addGroupsResult.isRight === true
       val groupIds: List[Long] = addGroupsResult.value
