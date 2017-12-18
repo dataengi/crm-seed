@@ -3,6 +3,7 @@ package com.dataengi.crm.identities.daos
 import com.dataengi.crm.identities.context.AuthenticationContext
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
+import org.specs2.matcher.MatchResult
 import play.api.test.PlaySpecification
 
 import scala.concurrent.duration._
@@ -16,42 +17,38 @@ class InMemoryPasswordInfoDAOSpec extends PlaySpecification with AuthenticationC
     )
   }
 
-  lazy val passwordInfoDAO = application.injector.instanceOf[PasswordInfoDAO]
-
-  lazy val loginInfo    = LoginInfo("testProviderId", "testProviderKey")
-  lazy val passwordInfo = PasswordInfo("testHasher", "password", Some("testSalt"))
+  lazy val passwordInfoDAO: PasswordInfoDAO = application.injector.instanceOf[PasswordInfoDAO]
 
   sequential
 
   "PasswordInfoDAO" should {
 
     "find/get not exist value" in {
+      val loginInfo                = loginInfoArbitrary.arbitrary.sample.get
       val resultPasswordInfoFuture = passwordInfoDAO.find(loginInfo)
       val resultPasswordInfo       = Await.result(resultPasswordInfoFuture, 10 seconds)
       resultPasswordInfo.isEmpty === true
     }
 
     "add login info" in {
-      val addUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.add(loginInfo, passwordInfo)
-      val addUserInfo: PasswordInfo               = Await.result(addUserInfoFuture, 10 seconds)
-      addUserInfo === passwordInfo
+      val loginInfo = loginInfoArbitrary.arbitrary.sample.get
+      addUserInfo(loginInfo)
     }
 
     "update login info" in {
-      val addUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.add(loginInfo, passwordInfo)
-      val addUserInfo: PasswordInfo               = Await.result(addUserInfoFuture, 10 seconds)
-      addUserInfo === passwordInfo
-      val updateUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.update(loginInfo, passwordInfo)
+      val loginInfo = loginInfoArbitrary.arbitrary.sample.get
+      addUserInfo(loginInfo)
+      val passwordInfoForUpdate                      = passwordInfoArbitrary.arbitrary.sample.get
+      val updateUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.update(loginInfo, passwordInfoForUpdate)
       val updateUserInfo: PasswordInfo               = Await.result(updateUserInfoFuture, 10 seconds)
-      updateUserInfo === passwordInfo
+      updateUserInfo === passwordInfoForUpdate
     }
 
     "save login info" in {
-      val saveUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfo)
-      val saveUserInfo: PasswordInfo               = Await.result(saveUserInfoFuture, 10 seconds)
-      saveUserInfo === passwordInfo
+      val loginInfo = loginInfoArbitrary.arbitrary.sample.get
+      saveUserInfo(loginInfo)
 
-      val passwordInfoForUpdate = passwordInfo.copy(password = "newPass")
+      val passwordInfoForUpdate = passwordInfoArbitrary.arbitrary.sample.get
 
       val updateUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfoForUpdate)
       val updateUserInfo: PasswordInfo               = Await.result(updateUserInfoFuture, 10 seconds)
@@ -59,14 +56,26 @@ class InMemoryPasswordInfoDAOSpec extends PlaySpecification with AuthenticationC
     }
 
     "remove login info" in {
-      val saveUserInfoFuture: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfo)
-      val saveUserInfo: PasswordInfo               = Await.result(saveUserInfoFuture, 10 seconds)
-      saveUserInfo === passwordInfo
+      val loginInfo = loginInfoArbitrary.arbitrary.sample.get
+      saveUserInfo(loginInfo)
       val removeLoginInfoFuture = passwordInfoDAO.remove(loginInfo)
       Await.result(removeLoginInfoFuture, 10 seconds)
       val resultPasswordInfoFuture = passwordInfoDAO.find(loginInfo)
       val resultPasswordInfo       = Await.result(resultPasswordInfoFuture, 10 seconds)
       resultPasswordInfo.isEmpty === true
     }
+  }
+
+  def addUserInfo(loginInfo: LoginInfo): MatchResult[PasswordInfo] = {
+    val passwordInfo                      = passwordInfoArbitrary.arbitrary.sample.get
+    val addUserInfo: Future[PasswordInfo] = passwordInfoDAO.add(loginInfo, passwordInfo)
+    println(passwordInfo)
+    Await.result(addUserInfo, 10 seconds) === passwordInfo
+  }
+
+  def saveUserInfo(loginInfo: LoginInfo): MatchResult[PasswordInfo] = {
+    val passwordInfo                       = passwordInfoArbitrary.arbitrary.sample.get
+    val saveUserInfo: Future[PasswordInfo] = passwordInfoDAO.save(loginInfo, passwordInfo)
+    Await.result(saveUserInfo, 10 seconds) === passwordInfo
   }
 }
