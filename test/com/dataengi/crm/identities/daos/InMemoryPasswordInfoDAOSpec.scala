@@ -69,7 +69,6 @@ class InMemoryPasswordInfoDAOSpec extends PlaySpecification with AuthenticationC
   def addUserInfo(loginInfo: LoginInfo): MatchResult[PasswordInfo] = {
     val passwordInfo                      = passwordInfoArbitrary.arbitrary.sample.get
     val addUserInfo: Future[PasswordInfo] = passwordInfoDAO.add(loginInfo, passwordInfo)
-    println(passwordInfo)
     Await.result(addUserInfo, 10 seconds) === passwordInfo
   }
 
