@@ -184,7 +184,7 @@ class UsersDAOSpec
       val getOptionUserResult = usersDAO.getOption(key).await()
       getOptionUserResult.isRight === true
 
-      getOptionUserResult.right.get.get.loginInfo === user.loginInfo
+      getOptionUserResult.value.get.loginInfo === user.loginInfo
     }
 
     "update state user" in {
@@ -203,7 +203,7 @@ class UsersDAOSpec
       println(s"[user-dao][get] ${getUserResult.logResult}")
       getUserResult.isRight === true
 
-      val key = getUserResult.right.get
+      val key = getUserResult.value
 
       val updateUserResult = usersDAO.updateState(key, UserStates.Activated).await()
       updateUserResult.isRight === true
