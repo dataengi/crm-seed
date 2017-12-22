@@ -80,7 +80,7 @@ class UsersDAOSpec
       println(s"[user-dao][get] ${getUserResult.logResult}")
       getUserResult.isRight === true
 
-      val users = usersDAO.findByCompany(companyId).await().right.get
+      val users = usersDAO.findByCompany(companyId).await().value
 
       users must have size 2
 
