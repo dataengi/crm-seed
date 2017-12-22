@@ -179,7 +179,7 @@ class UsersDAOSpec
       println(s"[user-dao][get] ${getUserResult.logResult}")
       getUserResult.isRight === true
 
-      val key = getUserResult.right.get
+      val key = getUserResult.value
 
       val getOptionUserResult = usersDAO.getOption(key).await()
       getOptionUserResult.isRight === true
