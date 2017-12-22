@@ -36,7 +36,7 @@ class ProfilesDAOSpec extends PlaySpecification with ProfilesContext with Specif
       val getProfileResult = profilesDAO.getOption(addResult.value).await()
       getProfileResult.isRight === true
 
-      getProfileResult.right.get.get === profile
+      getProfileResult.right.get.get === profile.copy(id = getProfileResult.right.get.get.id)
 
     }
 
