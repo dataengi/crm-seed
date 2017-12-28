@@ -55,6 +55,8 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
       removeCompanyResult.isRight === true
     }
 
+
+
     "update company" in {
       val company             = Company("CompanyForUpdate")
       val companyId           = companiesDAO.add(company).await().value
