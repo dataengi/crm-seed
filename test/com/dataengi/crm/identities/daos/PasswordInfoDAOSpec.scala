@@ -68,7 +68,8 @@ class PasswordInfoDAOSpec extends PlaySpecification with AuthenticationContext {
   }
 
   private def addUser(loginInfo: LoginInfo) = {
-    val user = User(loginInfo, companyArbitrary.arbitrary.sample.get, roleArbitrary.arbitrary.sample.get)
+    val user = User(loginInfo, companyArbitrary.arbitrary.value, roleArbitrary.arbitrary.value)
     usersDAO.add(user).await()
   }
+
 }
