@@ -8,13 +8,8 @@ trait RecoverPasswordInfoTableDescription extends TableDescription {
 
   import profile.api._
 
-  implicit val passwordInfoRecoverStatusMapper = MappedColumnType.base[RecoverPasswordInfoStatus, Int](
-    { (value: RecoverPasswordInfoStatus) =>
-      value.id
-    }, { id: Int =>
-      RecoverPasswordInfoStatuses(id)
-    }
-  )
+  implicit val passwordInfoRecoverStatusMapper: BaseColumnType[RecoverPasswordInfoStatus] =
+    enumColumnMapper(RecoverPasswordInfoStatuses)
 
   class RecoverPasswordInfoTable(tag: Tag) extends Table[RecoverPasswordInfo](tag, "recover_password_info") {
 
