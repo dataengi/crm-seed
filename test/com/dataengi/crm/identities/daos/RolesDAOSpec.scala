@@ -4,14 +4,13 @@ import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.configurations.RolesConfiguration
 import com.dataengi.crm.identities.context.AuthenticationContext
 import org.scalacheck.Gen
-import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 import com.dataengi.crm.identities.arbitraries.IdentitiesArbitrary
 import com.dataengi.crm.identities.models.{Actions, Permission, PermissionStates, Role}
 import com.dataengi.crm.common.context.types._
 import cats.syntax.traverse._
 
-class RolesDAOSpec extends PlaySpecification with AuthenticationContext with SpecificationsFinder with IdentitiesArbitrary {
+class RolesDAOSpec extends PlaySpecification with AuthenticationContext with IdentitiesArbitrary {
 
   sequential
 

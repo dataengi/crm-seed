@@ -5,13 +5,9 @@ import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.configurations.RolesConfiguration
 import com.dataengi.crm.identities.context.InvitesServiceContext
 import com.dataengi.crm.identities.models.Invite
-import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-/**
-  * Created by viktor on 25.11.16.
-  */
-class InvitesServiceSpec extends PlaySpecification with InvitesServiceContext with SpecificationsFinder {
+class InvitesServiceSpec extends PlaySpecification with InvitesServiceContext {
 
   sequential
 

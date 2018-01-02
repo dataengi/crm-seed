@@ -8,15 +8,9 @@ import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.common.context.types._
 import org.specs2.runner.SpecificationsFinder
 
-class ContactsBooksDAOSpec extends PlaySpecification with CRMApplication with SpecificationsFinder {
+class ContactsBooksDAOSpec extends PlaySpecification with CRMApplication {
 
   sequential
-
-  override lazy val fakeModule = new FakeModule {
-    additionalBindings = Seq(
-      bind[ContactsBooksDAO].to[ContactsBooksSlickDAOImplementation]
-    )
-  }
 
   lazy val contactsBooksDAO: ContactsBooksDAO = application.injector.instanceOf[ContactsBooksDAO]
 

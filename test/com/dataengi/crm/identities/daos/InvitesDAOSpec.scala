@@ -9,15 +9,9 @@ import com.dataengi.crm.identities.models._
 import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-class InvitesDAOSpec extends PlaySpecification with AuthenticationContext with SpecificationsFinder {
+class InvitesDAOSpec extends PlaySpecification with AuthenticationContext {
 
   sequential
-
-  override lazy val fakeModule = new FakeModule {
-    additionalBindings = Seq(
-      bind[InvitesDAO].to[InvitesSlickDAOImplementation]
-    )
-  }
 
   lazy val invitesDAO = application.injector.instanceOf[InvitesDAO]
   lazy val rolesDAO   = application.injector.instanceOf[RolesDAO]

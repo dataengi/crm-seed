@@ -10,6 +10,7 @@ import org.specs2.specification.{BeforeAfterAll, Scope}
 import play.api.Configuration
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Binding, Module}
+import play.api.inject.bind
 
 import scala.concurrent.ExecutionContext
 
@@ -19,20 +20,11 @@ trait CRMApplication extends Scope with WithInMemoryDataBase {
 
   implicit val executionContext = scala.concurrent.ExecutionContext.Implicits.global
 
-  lazy val fakeModule = new FakeModule()
-
-  lazy val applicationBuilder = new GuiceApplicationBuilder().overrides(fakeModule).configure(overrideConf)
+  lazy val applicationBuilder = new GuiceApplicationBuilder()
+    .overrides(bind[AvatarService].to[FakeAvatarService])
+    .configure(overrideConf)
 
   lazy val application = applicationBuilder.build()
-
-  class FakeModule extends Module {
-
-    var additionalBindings: Seq[Binding[_]] = Seq(
-      bind[AvatarService].to[FakeAvatarService]
-    )
-
-    override def bindings(environment: play.api.Environment, configuration: Configuration) = additionalBindings
-  }
 
   def beforeTestingRunning() = {
     // override it for prepared tests

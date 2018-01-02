@@ -4,10 +4,9 @@ import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.configurations.RolesConfiguration.SalesRepresentative
 import com.dataengi.crm.identities.context.AuthenticationContext
-import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-class AuthenticationServiceSpec extends PlaySpecification with AuthenticationContext with SpecificationsFinder {
+class AuthenticationServiceSpec extends PlaySpecification with AuthenticationContext {
 
   sequential
 

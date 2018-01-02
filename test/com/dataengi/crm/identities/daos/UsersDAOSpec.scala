@@ -15,14 +15,7 @@ class UsersDAOSpec
     extends PlaySpecification
     with AuthenticationContext
     with CompaniesServiceContext
-    with RolesServiceContext
-    with SpecificationsFinder {
-
-  override lazy val fakeModule = new FakeModule {
-    additionalBindings = Seq(
-      bind[RolesDAO].to[RolesSlickDAOImplementation]
-    )
-  }
+    with RolesServiceContext {
 
   val TestLoginInfo: LoginInfo = LoginInfo("provider", "dasd@asd.com")
   lazy val usersDAO            = application.injector.instanceOf[UsersDAO]
