@@ -3,19 +3,10 @@ package com.dataengi.crm.contacts.daos.context
 import com.dataengi.crm.contacts.daos._
 import com.dataengi.crm.contacts.models._
 import com.dataengi.crm.contacts.context.ContactsServiceContext
-import com.dataengi.crm.identities.daos.{UsersDAO, UsersSlickDAOImplementation}
+import com.dataengi.crm.identities.daos.UsersDAO
 import org.joda.time.DateTime
 
 trait ContactsDAOContext extends ContactsServiceContext {
-
-  override lazy val fakeModule = new FakeModule {
-    additionalBindings = Seq(
-      bind[ContactsSlickDAO].to[ContactsSlickDAOImplementation],
-      bind[ContactsBooksDAO].to[ContactsBooksSlickDAOImplementation],
-      bind[GroupsDAO].to[GroupsSlickDAOImplementation],
-      bind[UsersDAO].to[UsersSlickDAOImplementation]
-    )
-  }
 
   lazy val contactsDAO      = application.injector.instanceOf[ContactsSlickDAO]
   lazy val contactsBooksDAO = application.injector.instanceOf[ContactsBooksDAO]

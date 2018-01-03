@@ -4,10 +4,9 @@ import com.dataengi.crm.common.context.CRMApplication
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.configurations.CompaniesConfiguration
 import com.dataengi.crm.identities.services.CompaniesService
-import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-class IdentitiesInitiationSpec extends PlaySpecification with CRMApplication with SpecificationsFinder {
+class IdentitiesInitiationSpec extends PlaySpecification with CRMApplication {
 
   lazy val companiesConfiguration = application.injector.instanceOf[CompaniesConfiguration]
   lazy val companiesService = application.injector.instanceOf[CompaniesService]

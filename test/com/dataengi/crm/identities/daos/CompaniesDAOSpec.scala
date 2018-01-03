@@ -4,21 +4,11 @@ import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.identities.context.AuthenticationContext
 import com.dataengi.crm.identities.models.Company
-import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-/**
-  * Created by nk91 on 06.12.16.
-  */
-class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with SpecificationsFinder {
+class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext {
 
   sequential
-
-  override lazy val fakeModule = new FakeModule {
-    additionalBindings = Seq(
-      bind[CompaniesDAO].to[CompaniesSlickDAOImplementation]
-    )
-  }
 
   lazy val companiesDAO = application.injector.instanceOf[CompaniesDAO]
 

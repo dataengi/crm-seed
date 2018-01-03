@@ -10,7 +10,7 @@ import org.scalacheck.Gen
 import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-class GroupsServiceSpec extends PlaySpecification with GroupsServiceContext with SpecificationsFinder {
+class GroupsServiceSpec extends PlaySpecification with GroupsServiceContext {
 
   sequential
 

@@ -1,16 +1,11 @@
 package com.dataengi.crm.identities.services
 
 import com.dataengi.crm.common.context.types._
-import com.dataengi.crm.common.errors.ValueNotFound
 import com.dataengi.crm.common.extensions.awaits._
 import com.dataengi.crm.identities.context.CompaniesServiceContext
-import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-/**
-  * Created by nk91 on 25.11.16.
-  */
-class CompaniesServiceSpec extends PlaySpecification with CompaniesServiceContext with SpecificationsFinder {
+class CompaniesServiceSpec extends PlaySpecification with CompaniesServiceContext {
 
   sequential
 
