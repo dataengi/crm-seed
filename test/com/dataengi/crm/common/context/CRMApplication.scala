@@ -7,7 +7,7 @@ import com.dataengi.crm.common.mocks.FakeAvatarService
 import org.specs2.specification.core.{Fragments, SpecificationStructure}
 import org.specs2.specification.create.FragmentsFactory
 import org.specs2.specification.{BeforeAfterAll, Scope}
-import play.api.Configuration
+import play.api.{Application,Configuration}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Binding, Module}
 
@@ -23,7 +23,7 @@ trait CRMApplication extends Scope with WithInMemoryDataBase {
 
   lazy val applicationBuilder = new GuiceApplicationBuilder().overrides(fakeModule).configure(overrideConf)
 
-  lazy val application = applicationBuilder.build()
+  lazy val application: Application = applicationBuilder.build()
 
   class FakeModule extends Module {
 

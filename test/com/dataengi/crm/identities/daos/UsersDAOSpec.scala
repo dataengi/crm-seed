@@ -1,14 +1,14 @@
 package com.dataengi.crm.identities.daos
 
-import com.mohiva.play.silhouette.api.LoginInfo
 import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.common.extensions.awaits._
-import com.dataengi.crm.common.extensions.logging._
 import com.dataengi.crm.configurations.RolesConfiguration
 import com.dataengi.crm.identities.context.{AuthenticationContext, CompaniesServiceContext, RolesServiceContext}
-import com.dataengi.crm.identities.models.{User, UserStates, Company}
+import com.dataengi.crm.identities.models.{Company, User, UserStates}
+import com.mohiva.play.silhouette.api.LoginInfo
 import org.scalacheck.Gen
 import org.specs2.runner.SpecificationsFinder
+import play.api.Application
 import play.api.test.PlaySpecification
 
 class UsersDAOSpec
@@ -18,98 +18,49 @@ class UsersDAOSpec
     with RolesServiceContext
     with SpecificationsFinder {
 
-  override lazy val fakeModule = new FakeModule {
-    additionalBindings = Seq(
-      bind[RolesDAO].to[RolesSlickDAOImplementation]
-    )
-  }
-
-  lazy val usersDAO = application.injector.instanceOf[UsersDAO]
-  def createCompany(): Company = {
-    val NewCompanyName: String          = "NEW_COMPANY" + Gen.alphaStr.sample.get
-    val newCompanyResult: XorType[Long] = companiesService.create(NewCompanyName).await()
-    val company: Company                = companiesService.get(newCompanyResult.value).await().value
-
-    company.id must not be None
-
-    company
-  }
-
   "UsersDAOSpecification" should {
 
     "add user" in {
 
-      val role                     = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
-      val company                  = createCompany()
-      val TestLoginInfo: LoginInfo = LoginInfo("provider", "dasd@asd.com")
-      val user: User = User(
-        loginInfo = TestLoginInfo,
-        company = company,
-        role = role
-      )
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
 
-      val getUserResult = usersDAO.add(user).await()
-      println(s"[user-dao][get] ${getUserResult.logResult}")
+      val getUserResult = usersDAO.add(users.head).await()
       getUserResult.isRight === true
 
     }
 
     "add userList" in {
-      val company                   = createCompany()
-      val role                      = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
-      val TestLoginInfo: LoginInfo  = LoginInfo("provider", "dasd@asd.com")
-      val TestLoginInfo2: LoginInfo = LoginInfo("provider2", "dasd2@asd.com")
-      val user = User(
-        loginInfo = TestLoginInfo,
-        company = company,
-        role = role
-      )
-      val user2 = User(
-        loginInfo = TestLoginInfo2,
-        company = company,
-        role = role
-      )
+      val fixture = new Fixture(application, userCount = 2)
+      import fixture._
 
-      val userList = List(user, user2)
+      val getUserResult = usersDAO.add(users.toList).await()
 
-      company.id must not be None
+      val users1 = usersDAO.findByCompany(company.id.get).await().value
 
-      val companyId = company.id.get
-
-      val getUserResult = usersDAO.add(userList).await()
-      println(s"[user-dao][get] ${getUserResult.logResult}")
-      getUserResult.isRight === true
-
-      val users = usersDAO.findByCompany(companyId).await().value
-
-      users must have size 2
-
-      users.filter((user: User) => user.loginInfo.providerID == "provider") must have size 1
-      users.filter((user: User) => user.loginInfo.providerID == "provider2") must have size 1
+      users1 must have size 2
 
     }
 
     "find user by login info" in {
 
-      val TestLoginInfo: LoginInfo = LoginInfo("provider", "dasd@asd.com")
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
 
-      val findUserResult = usersDAO.find(TestLoginInfo).await()
-      println(s"[user-dao][find] ${findUserResult.logResult}")
-      findUserResult.isRight === true
-      val user = findUserResult.value.get
-      user.loginInfo === TestLoginInfo
+      val getUserResult = usersDAO.add(users.head).await()
+
+      val findUserResult = usersDAO.find(users.head.loginInfo).await()
+
+      val user: User = findUserResult.value.get
+      user.loginInfo === users.head.loginInfo
     }
 
     "find user by companyId negative" in {
-      val company = createCompany()
-      val role    = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
-
-      company.id must not be None
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
 
       val companyId      = company.id.get
       val findUserResult = usersDAO.findByCompany(companyId).await()
-      println(s"[user-dao][find] ${findUserResult.logResult}")
-      findUserResult.isRight === true
 
       val users = findUserResult.value
 
@@ -118,43 +69,34 @@ class UsersDAOSpec
     }
 
     "all user" in {
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
       val allResult = usersDAO.all.await()
-      println(s"[user-dao][all] ${allResult.logResult}")
       allResult.isRight === true
     }
 
     "update user" in {
-      val company = createCompany()
-      val role    = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
 
-      val TestLoginInfo3: LoginInfo = LoginInfo("provider3", "dasd3@asd.com")
-      val TestLoginInfo4: LoginInfo = LoginInfo("provider4", "dasd3@asd.com")
+      val TestLoginInfoUpdate: LoginInfo = LoginInfo("provider", users.head.loginInfo.providerKey)
 
-      val user3 = User(
-        loginInfo = TestLoginInfo3,
-        company = company,
-        role = role
-      )
-
-      val getUserResult = usersDAO.add(user3).await()
-      println(s"[user-dao][get] ${getUserResult.logResult}")
-      getUserResult.isRight === true
+      val getUserResult = usersDAO.add(users.head).await()
 
       val key = getUserResult.value
 
-      val updateUser       = User(loginInfo = TestLoginInfo4, company = company, role = role).copy(id = Some(key))
+      val updateUser       = User(loginInfo = TestLoginInfoUpdate, company = company, role = role).copy(id = Some(key))
       val updateUserResult = usersDAO.update(updateUser).await()
-      updateUserResult.isRight === true
 
       val getUser = usersDAO.get(key).await()
-      getUser.isRight === true
-      getUser.value.loginInfo.providerKey === TestLoginInfo4.providerKey
+
+      getUser.value.loginInfo.providerID === TestLoginInfoUpdate.providerID
 
     }
 
     "update user negative" in {
-      val company = createCompany()
-      val role    = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
 
       val TestLoginInfo5: LoginInfo = LoginInfo("provider4", "dasd4@asd.com")
 
@@ -165,53 +107,60 @@ class UsersDAOSpec
     }
 
     "getOption user" in {
-      val company = createCompany()
-      val role    = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
 
-      val TestLoginInfo: LoginInfo = LoginInfo("provider", "dasd@asd.com")
-      val user = User(
-        loginInfo = TestLoginInfo,
-        company = company,
-        role = role
-      )
-
-      val getUserResult = usersDAO.add(user).await()
-      println(s"[user-dao][get] ${getUserResult.logResult}")
-      getUserResult.isRight === true
+      val getUserResult = usersDAO.add(users.head).await()
 
       val key = getUserResult.value
 
       val getOptionUserResult = usersDAO.getOption(key).await()
-      getOptionUserResult.isRight === true
 
-      getOptionUserResult.value.get.loginInfo === user.loginInfo
+      getOptionUserResult.value.get.loginInfo === users.head.loginInfo
     }
 
     "update state user" in {
-      val company = createCompany()
-      val role    = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
+      val fixture = new Fixture(application, userCount = 1)
+      import fixture._
 
-      val TestLoginInfo: LoginInfo = LoginInfo("provider", "dasd@asd.com")
-
-      val user = User(
-        loginInfo = TestLoginInfo,
-        company = company,
-        role = role
-      )
-
-      val getUserResult = usersDAO.add(user).await()
-      println(s"[user-dao][get] ${getUserResult.logResult}")
-      getUserResult.isRight === true
+      val getUserResult = usersDAO.add(users.head).await()
 
       val key = getUserResult.value
 
       val updateUserResult = usersDAO.updateState(key, UserStates.Activated).await()
-      updateUserResult.isRight === true
 
       val getUser = usersDAO.get(key).await()
-      getUser.isRight === true
       getUser.value.state === UserStates.Activated
+    }
+  }
 
+  class Fixture(application: Application, userCount: Int) {
+    lazy val usersDAO = application.injector.instanceOf[UsersDAO]
+    def createCompany(): Company = {
+      val NewCompanyName: String          = "NEW_COMPANY" + Gen.alphaStr.sample.get
+      val newCompanyResult: XorType[Long] = companiesService.create(NewCompanyName).await()
+      val company: Company                = companiesService.get(newCompanyResult.value).await().value
+
+      company.id must not be None
+
+      company
+    }
+
+    lazy val company = createCompany()
+    lazy val role    = rolesService.find(RolesConfiguration.CompanyManager.name).await().value
+
+    lazy val users = (1 to userCount).map { _ =>
+      val TestLoginInfo: LoginInfo =
+        LoginInfo(
+          "provider-" + Gen.alphaStr.sample.get,
+          s"${Gen.alphaStr.sample.get}@asd.com"
+        )
+
+      User(
+        loginInfo = TestLoginInfo,
+        company = company,
+        role = role
+      )
     }
   }
 
