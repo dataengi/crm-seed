@@ -20,13 +20,11 @@ class UsersDAOSpec
   "UsersDAOSpecification" should {
 
     "add user" in {
-
       val fixture = new Fixture(application, userCount = 1)
       import fixture._
 
       val getUserResult = usersDAO.add(users.head).await()
       getUserResult.isRight === true
-
     }
 
     "add userList" in {
@@ -38,11 +36,9 @@ class UsersDAOSpec
       val users1 = usersDAO.findByCompany(company.id.get).await().value
 
       users1 must have size 2
-
     }
 
     "find user by login info" in {
-
       val fixture = new Fixture(application, userCount = 1)
       import fixture._
 
@@ -64,7 +60,6 @@ class UsersDAOSpec
       val users = findUserResult.value
 
       users must have size 0
-
     }
 
     "all user" in {
@@ -90,7 +85,6 @@ class UsersDAOSpec
       val getUser = usersDAO.get(key).await()
 
       getUser.value.loginInfo.providerID === TestLoginInfoUpdate.providerID
-
     }
 
     "update user negative" in {
@@ -102,7 +96,6 @@ class UsersDAOSpec
       val updateUser       = User(loginInfo = TestLoginInfo5, company = company, role = role, id = Some(56667))
       val updateUserResult = usersDAO.update(updateUser).await()
       updateUserResult.isLeft === true
-
     }
 
     "getOption user" in {
@@ -139,9 +132,7 @@ class UsersDAOSpec
       val NewCompanyName: String          = "NEW_COMPANY" + Gen.alphaStr.sample.get
       val newCompanyResult: XorType[Long] = companiesService.create(NewCompanyName).await()
       val company: Company                = companiesService.get(newCompanyResult.value).await().value
-
       company.id must not be None
-
       company
     }
 
