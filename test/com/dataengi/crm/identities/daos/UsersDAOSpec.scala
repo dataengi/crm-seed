@@ -7,7 +7,7 @@ import com.dataengi.crm.identities.context.{AuthenticationContext, CompaniesServ
 import com.dataengi.crm.identities.models.{Company, User, UserStates}
 import com.mohiva.play.silhouette.api.LoginInfo
 import org.scalacheck.Gen
-import org.specs2.runner.SpecificationsFinder
+import org.specs2.specification.Scope
 import play.api.Application
 import play.api.test.PlaySpecification
 
@@ -19,78 +19,51 @@ class UsersDAOSpec
 
   "UsersDAOSpecification" should {
 
-    "add user" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
-
+    "add user" in new Fixture(application, userCount = 1) {
       val getUserResult = usersDAO.add(users.head).await()
       getUserResult.isRight === true
     }
 
-    "add userList" in {
-      val fixture = new Fixture(application, userCount = 2)
-      import fixture._
-
+    "add userList" in new Fixture(application, userCount = 2) {
       val getUserResult = usersDAO.add(users.toList).await()
-
-      val users1 = usersDAO.findByCompany(company.id.get).await().value
-
+      val users1        = usersDAO.findByCompany(company.id.get).await().value
       users1 must have size 2
     }
 
-    "find user by login info" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
-
-      val getUserResult = usersDAO.add(users.head).await()
-
+    "find user by login info" in new Fixture(application, userCount = 1) {
+      val getUserResult  = usersDAO.add(users.head).await()
       val findUserResult = usersDAO.find(users.head.loginInfo).await()
 
       val user: User = findUserResult.value.get
       user.loginInfo === users.head.loginInfo
     }
 
-    "find user by companyId negative" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
-
+    "find user by companyId negative" in new Fixture(application, userCount = 1) {
       val companyId      = company.id.get
       val findUserResult = usersDAO.findByCompany(companyId).await()
 
-      val users = findUserResult.value
-
-      users must have size 0
+      findUserResult.value must have size 0
     }
 
-    "all user" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
+    "all user" in new Fixture(application, userCount = 1){
       val allResult = usersDAO.all.await()
       allResult.isRight === true
     }
 
-    "update user" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
-
-      val TestLoginInfoUpdate: LoginInfo = LoginInfo("provider", users.head.loginInfo.providerKey)
-
+    "update user" in new Fixture(application, userCount = 1) {
       val getUserResult = usersDAO.add(users.head).await()
 
       val key = getUserResult.value
 
-      val updateUser       = User(loginInfo = TestLoginInfoUpdate, company = company, role = role).copy(id = Some(key))
+      val updateUser       = User(loginInfo = testLoginInfoUpdate, company = company, role = role).copy(id = Some(key))
       val updateUserResult = usersDAO.update(updateUser).await()
 
       val getUser = usersDAO.get(key).await()
 
-      getUser.value.loginInfo.providerID === TestLoginInfoUpdate.providerID
+      getUser.value.loginInfo.providerID === testLoginInfoUpdate.providerID
     }
 
-    "update user negative" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
-
+    "update user negative" in new Fixture(application, userCount = 1){
       val TestLoginInfo5: LoginInfo = LoginInfo("provider4", "dasd4@asd.com")
 
       val updateUser       = User(loginInfo = TestLoginInfo5, company = company, role = role, id = Some(56667))
@@ -98,10 +71,7 @@ class UsersDAOSpec
       updateUserResult.isLeft === true
     }
 
-    "getOption user" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
-
+    "getOption user" in new Fixture(application, userCount = 1){
       val getUserResult = usersDAO.add(users.head).await()
 
       val key = getUserResult.value
@@ -111,12 +81,8 @@ class UsersDAOSpec
       getOptionUserResult.value.get.loginInfo === users.head.loginInfo
     }
 
-    "update state user" in {
-      val fixture = new Fixture(application, userCount = 1)
-      import fixture._
-
+    "update state user" in new Fixture(application, userCount = 1) {
       val getUserResult = usersDAO.add(users.head).await()
-
       val key = getUserResult.value
 
       val updateUserResult = usersDAO.updateState(key, UserStates.Activated).await()
@@ -126,8 +92,12 @@ class UsersDAOSpec
     }
   }
 
-  class Fixture(application: Application, userCount: Int) {
+  private class Fixture(application: Application, userCount: Int) extends Scope {
+
+    val testLoginInfoUpdate: LoginInfo = LoginInfo("provider", users.head.loginInfo.providerKey)
+
     lazy val usersDAO = application.injector.instanceOf[UsersDAO]
+
     def createCompany(): Company = {
       val NewCompanyName: String          = "NEW_COMPANY" + Gen.alphaStr.sample.get
       val newCompanyResult: XorType[Long] = companiesService.create(NewCompanyName).await()
