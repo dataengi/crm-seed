@@ -1,13 +1,12 @@
 package com.dataengi.crm.profiles.daos
 
-import play.api.test.PlaySpecification
-import com.dataengi.crm.profiles.context.ProfilesContext
 import com.dataengi.crm.common.context.types._
+import com.dataengi.crm.common.extensions.arbitrary._
 import com.dataengi.crm.common.extensions.awaits._
-import com.dataengi.crm.common.extensions.logging._
+import com.dataengi.crm.profiles.context.ProfilesContext
 import com.dataengi.crm.profiles.models.Profile
-import org.scalacheck.{Arbitrary, Gen}
 import org.specs2.runner.SpecificationsFinder
+import play.api.test.PlaySpecification
 
 /**
   * Created by nk91 on 31.01.17.
@@ -29,25 +28,23 @@ class ProfilesDAOSpec extends PlaySpecification with ProfilesContext with Specif
       val result = profilesDAO.clear.await()
       result.isRight === true
 
-      val profile   = profileArbitrary.arbitrary.sample.get
+      val profile   = profileArbitrary.arbitrary.value
       val addResult = profilesDAO.add(profile).await()
       addResult.isRight === true
 
-      val getProfileResult = profilesDAO.getOption(addResult.value).await()
-      getProfileResult.isRight === true
+      val getProfileResult: XorType[Profile] = profilesDAO.get(addResult.value).await()
 
-      getProfileResult.right.get.get === profile.copy(id = getProfileResult.right.get.get.id)
-
+      getProfileResult.value === profile.copy(id = Some(addResult.value))
     }
 
     "add profile" in {
-      val profile   = profileArbitrary.arbitrary.sample.get
+      val profile   = profileArbitrary.arbitrary.value
       val addResult = profilesDAO.add(profile).await()
       addResult.isRight === true
     }
 
     "get profile by id" in {
-      val profile   = profileArbitrary.arbitrary.sample.get
+      val profile   = profileArbitrary.arbitrary.value
       val addResult = profilesDAO.add(profile).await()
       addResult.isRight === true
 
@@ -56,7 +53,7 @@ class ProfilesDAOSpec extends PlaySpecification with ProfilesContext with Specif
     }
 
     "get profile by nickname" in {
-      val profile   = profileArbitrary.arbitrary.sample.get
+      val profile   = profileArbitrary.arbitrary.value
       val addResult = profilesDAO.add(profile).await()
       addResult.isRight === true
 
@@ -68,7 +65,7 @@ class ProfilesDAOSpec extends PlaySpecification with ProfilesContext with Specif
     "get profile by userId" in {
       val result = profilesDAO.clear.await()
       result.isRight === true
-      val profileData = profileArbitrary.arbitrary.sample.get.copy(id = None)
+      val profileData = profileArbitrary.arbitrary.value.copy(id = None)
       val addResult   = profilesDAO.add(profileData).await()
       addResult.isRight === true
       val getProfileByIdResult = profilesDAO.get(addResult.value).await()

@@ -102,8 +102,8 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext with
     "Add list of companies" in {
       val company1         = Company(name = "Test")
       val company2         = Company(name = "Test1")
-      val CompanyList      = List(company1, company2)
-      val addCompanyResult = companiesDAO.add(CompanyList).await()
+      val companies      = List(company1, company2)
+      val addCompanyResult = companiesDAO.add(companies).await()
       println(s"[companies-dao][add] $addCompanyResult}")
       val companiesDB = addCompanyResult.value
 
