@@ -8,7 +8,7 @@ import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.contacts.daos.context.ContactsDAOContext
 import org.specs2.runner.SpecificationsFinder
 
-class ContactsDAOSpec extends PlaySpecification with ContactsDAOContext with SpecificationsFinder {
+class ContactsDAOSpec extends PlaySpecification with ContactsDAOContext {
 
   sequential
 

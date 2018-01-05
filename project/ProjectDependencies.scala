@@ -12,7 +12,7 @@ object Version {
   val silhouette          = "5.0.0"
   val specs2              = "3.8.8"
   val dockerTestKit       = "0.9.0"
-  val slickless           = "0.3.0"
+  val slickless           = "0.3.2"
   val ficus               = "1.2.6"
   val scalaCacheGuava     = "0.9.4"
   val playMailer          = "6.0.1"

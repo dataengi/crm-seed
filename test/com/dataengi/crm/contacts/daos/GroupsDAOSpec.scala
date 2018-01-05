@@ -13,15 +13,9 @@ import com.dataengi.crm.common.extensions.arbitrary._
 import org.scalacheck.Gen
 import org.specs2.runner.SpecificationsFinder
 
-class GroupsDAOSpec extends PlaySpecification with CRMApplication with SpecificationsFinder with ContactsArbitrary {
+class GroupsDAOSpec extends PlaySpecification with CRMApplication with ContactsArbitrary {
 
   sequential
-
-  override lazy val fakeModule = new FakeModule {
-    additionalBindings = Seq(
-      bind[GroupsDAO].to[GroupsSlickDAOImplementation]
-    )
-  }
 
   lazy val groupsDAO: GroupsDAO = application.injector.instanceOf[GroupsDAO]
   lazy val TestGroup: Group     = Group("TestGroup" + Gen.alphaStr.sample.get, 0, new DateTime().getMillis)

@@ -8,10 +8,7 @@ import com.dataengi.crm.profiles.models.Profile
 import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-/**
-  * Created by nk91 on 31.01.17.
-  */
-class ProfilesDAOSpec extends PlaySpecification with ProfilesContext with SpecificationsFinder {
+class ProfilesDAOSpec extends PlaySpecification with ProfilesContext {
 
   "ProfilesDAOSpecification" should {
 

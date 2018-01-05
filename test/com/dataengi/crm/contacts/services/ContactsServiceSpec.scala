@@ -10,7 +10,7 @@ import com.dataengi.crm.identities.models.{Company, Role, User}
 import org.specs2.runner.SpecificationsFinder
 import play.api.test.PlaySpecification
 
-class ContactsServiceSpec extends PlaySpecification with ContactsServiceContext with SpecificationsFinder {
+class ContactsServiceSpec extends PlaySpecification with ContactsServiceContext {
 
   sequential
 

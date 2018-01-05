@@ -10,6 +10,7 @@ import com.dataengi.crm.identities.models.Actions.Action
 import com.dataengi.crm.identities.models.InviteStatuses.InviteStatus
 import com.dataengi.crm.identities.models._
 import com.dataengi.crm.identities.models.PermissionStates.PermissionState
+import com.mohiva.play.silhouette.api.util.PasswordInfo
 import org.joda.time.DateTime
 import org.scalacheck.{Arbitrary, Gen}
 import play.api.libs.json.Json
@@ -43,5 +44,5 @@ trait IdentitiesArbitrary extends CommonArbitrary {
   implicit val finiteDurationArbitrary = Arbitrary(finiteDurationGen)
   implicit val loginInfoArbitrary      = Arbitrary(Gen.resultOf(LoginInfo))
   implicit val authenticatorArbitrary  = Arbitrary(Gen.resultOf(JWTAuthenticator.apply _))
-
+  implicit val passwordInfoArbitrary   = Arbitrary(Gen.resultOf(PasswordInfo))
 }
