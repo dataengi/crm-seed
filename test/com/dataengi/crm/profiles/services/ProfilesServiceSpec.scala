@@ -5,13 +5,8 @@ import play.api.test.PlaySpecification
 import com.dataengi.crm.profiles.context.ProfilesContext
 import com.dataengi.crm.common.context.types._
 import com.dataengi.crm.common.extensions.awaits._
-import com.dataengi.crm.common.extensions.logging._
-import org.specs2.runner.SpecificationsFinder
 
-/**
-  * Created by nk91 on 31.01.17.
-  */
-class ProfilesServiceSpec extends PlaySpecification with ProfilesContext with SpecificationsFinder {
+class ProfilesServiceSpec extends PlaySpecification with ProfilesContext {
 
   sequential
 

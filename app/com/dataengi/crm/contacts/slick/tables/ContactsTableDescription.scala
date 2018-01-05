@@ -24,21 +24,9 @@ trait ContactsTableDescription extends ContactsBookTableDescription {
                         note: Option[String],
                         advertiserId: Option[Long])
 
-  implicit val contactTypeMapper = MappedColumnType.base[ContactType, Int](
-    { (value: ContactType) =>
-      value.id
-    }, { id: Int =>
-      ContactTypes(id)
-    }
-  )
+  implicit val contactTypeMapper: BaseColumnType[ContactType] = enumColumnMapper(ContactTypes)
 
-  implicit val contactFieldTypeMapper = MappedColumnType.base[ContactFieldType, Int](
-    { (value: ContactFieldType) =>
-      value.id
-    }, { id: Int =>
-      ContactFieldTypes(id)
-    }
-  )
+  implicit val contactFieldTypeMapper: BaseColumnType[ContactFieldType] = enumColumnMapper(ContactFieldTypes)
 
   class ContactTable(tag: Tag) extends Table[ContactRow](tag, "contacts") {
 
@@ -58,7 +46,20 @@ trait ContactsTableDescription extends ContactsBookTableDescription {
     def advertiserId   = column[Option[Long]]("advertiser")
 
     def * : ProvenShape[ContactRow] =
-      (id, name, contactsBookId, createDate, skypeId, fax, company, jobPosition, addressId, timeZone, language, contactType, note, advertiserId) <> (ContactRow.tupled, ContactRow.unapply)
+      (id,
+       name,
+       contactsBookId,
+       createDate,
+       skypeId,
+       fax,
+       company,
+       jobPosition,
+       addressId,
+       timeZone,
+       language,
+       contactType,
+       note,
+       advertiserId) <> (ContactRow.tupled, ContactRow.unapply)
 
   }
 

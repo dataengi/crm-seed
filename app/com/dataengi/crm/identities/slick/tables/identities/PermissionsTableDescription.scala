@@ -8,13 +8,7 @@ trait PermissionsTableDescription extends TableDescription {
 
   import profile.api._
 
-  implicit val permissionStateMapper = MappedColumnType.base[PermissionState, Int](
-    { (value: PermissionState) =>
-      value.id
-    }, { id: Int =>
-      PermissionStates(id)
-    }
-  )
+  implicit val permissionStateMapper: BaseColumnType[PermissionState] = enumColumnMapper(PermissionStates)
 
   case class PermissionRow(action: String, state: PermissionState, roleId: Option[Long], id: Long = 0l)
 

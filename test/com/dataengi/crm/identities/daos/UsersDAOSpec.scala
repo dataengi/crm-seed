@@ -15,8 +15,7 @@ class UsersDAOSpec
     extends PlaySpecification
     with AuthenticationContext
     with CompaniesServiceContext
-    with RolesServiceContext
-    with SpecificationsFinder {
+    with RolesServiceContext {
 
   "UsersDAOSpecification" should {
 

@@ -8,13 +8,7 @@ trait UsersTableDescription extends LoginInfoTableDescription with RolesTableDes
 
   import profile.api._
 
-  implicit val userStateMapper: BaseColumnType[UserState] = MappedColumnType.base[UserState, Int](
-    { (value: UserState) =>
-      value.id
-    }, { (id: Int) =>
-      UserStates(id)
-    }
-  )
+  implicit val userStateMapper: BaseColumnType[UserState] = enumColumnMapper(UserStates)
 
   case class UserRow(loginInfoId: Long, companyId: Long, roleId: Long, state: UserState, id: Long = 0l)
 
