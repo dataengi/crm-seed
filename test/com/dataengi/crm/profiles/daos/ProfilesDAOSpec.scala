@@ -13,8 +13,8 @@ class ProfilesDAOSpec extends PlaySpecification with ProfilesContext {
   "ProfilesDAOSpecification" should {
 
     "get option profile by id" in {
-
-      val getProfileResult = profilesDAO.getOption(24254625625L).await()
+      val NonExistId = 24254625625L
+      val getProfileResult = profilesDAO.getOption(NonExistId).await()
       getProfileResult.isRight === true
 
       getProfileResult === Right(None)

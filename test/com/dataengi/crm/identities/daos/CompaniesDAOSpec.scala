@@ -19,7 +19,6 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext {
 
     "add company and get by id" in {
       val addCompanyResult = companiesDAO.add(TestCompany).await()
-      println(s"[companies-dao][add] $addCompanyResult}")
       addCompanyResult.isRight === true
       val id             = addCompanyResult.value
       val getByIdCompany = companiesDAO.get(id).await()
@@ -64,8 +63,8 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext {
     }
 
     "update negative" in {
-
-      val result = companiesDAO.update(Company("test")).await()
+      val TestCompany = Company("test")
+      val result = companiesDAO.update(TestCompany).await()
 
       result.isLeft === true
 
@@ -85,7 +84,6 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext {
 
     "find exist company by name" in {
       val getByNameResult = companiesDAO.find(TestCompany.name).await()
-      println(s"[companies-dao][get-by-name] $getByNameResult}")
       getByNameResult.isRight === true
     }
 
@@ -94,7 +92,6 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext {
       val company2         = Company(name = "Test1")
       val companies      = List(company1, company2)
       val addCompanyResult = companiesDAO.add(companies).await()
-      println(s"[companies-dao][add] $addCompanyResult}")
       val companiesDB = addCompanyResult.value
 
       companiesDB must have size 2
@@ -121,7 +118,6 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext {
       val company2         = Company(name = "Test1")
       val CompanyList      = List(company1, company2)
       val addCompanyResult = companiesDAO.add(CompanyList).await()
-      println(s"[companies-dao][add] $addCompanyResult}")
       addCompanyResult.isRight === true
       val getByIdCompany = companiesDAO.all.await()
       getByIdCompany.isRight === true
@@ -131,7 +127,6 @@ class CompaniesDAOSpec extends PlaySpecification with AuthenticationContext {
     "add and remove" in {
       val company          = Company("Company for removing")
       val addCompanyResult = companiesDAO.add(company).await()
-      println(s"[companies-dao][add] $addCompanyResult}")
       addCompanyResult.isRight === true
       val id             = addCompanyResult.value
       val getByIdCompany = companiesDAO.get(id).await()
