@@ -14,6 +14,7 @@ import scala.concurrent.ExecutionContext
 trait CompaniesDAO extends AutoIncBaseDAO[Company] {
 
   def find(name: String): Or[Option[Company]]
+  def clear: EmptyOr
 
 }
 
@@ -42,7 +43,7 @@ class CompaniesSlickDAOImplementation @Inject()(protected val dbConfigProvider: 
   override def add(values: List[Company]): Or[List[Long]] = db.run { insertCompaniesAction(values).map(_.toList) }.toOr
 
   override def all: Or[List[Company]] = db.run(companiesAction).toOr.map(_.toList)
-
+  override def clear: EmptyOr = db.run(deleteAll).toEmptyOr
 }
 
 trait CompaniesQueries extends CompaniesTableDescription {
@@ -65,7 +66,7 @@ trait CompaniesQueries extends CompaniesTableDescription {
   def selectCompanyByName(name: String) = Companies.filter(_.name === name).result.headOption.map(_.map(mapCompany))
 
   def companiesAction = (Companies result).map(_.map(mapCompany))
-
+  def deleteAll = Companies.delete
   val mapCompany: (CompanyRow) => Company = raw => Company(raw.name, Some(raw.id))
 
   val unMapCompany: (Company) => CompanyRow = company => CompanyRow(company.name, company.id.getOrElse(0))

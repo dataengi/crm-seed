@@ -38,7 +38,7 @@ class GroupsSlickDAOImplementation @Inject()(protected val dbConfigProvider: Dat
 
   override def update(obj: Group): Or[Unit] = obj.id match {
     case Some(id) => db.run(updateGroupAction(id, obj)).toEmptyOr
-    case None     => GroupsDAOErrors.GroupIdIsEmpty.toEmptyOr
+    case None     => GroupsDAOErrors.GroupIdIsEmpty.toErrorOr
   }
 
   override def delete(key: Long): Or[Unit] = db.run(deleteGroupAction(key)).toEmptyOr
