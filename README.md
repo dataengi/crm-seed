@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/dataengi/crm-seed.svg?branch=master)](https://travis-ci.org/dataengi/crm-seed)
 [![Join the chat at https://gitter.im/dataengi/crm-seed](https://badges.gitter.im/dataengi/crm-seed.svg)](https://gitter.im/dataengi/crm-seed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+The Try in PWD below allows you to quickly deploy the entire CRM stack with a click of the button. This will allow you to quickly test the stack to see if it meets your needs.
+
+[![Try in PWD](https://github.com/play-with-docker/stacks/raw/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/dataengi/crm-seed/Iplement-Try-in-PWD-deploy-%2325/docker-compose.yml) 
 
 Scala seed project for starting new customer relationship management system.
 
